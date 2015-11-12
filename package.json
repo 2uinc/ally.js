@@ -61,9 +61,6 @@
     "lint": "npm-run-all --parallel lint:js lint:md",
     "lint:js": "eslint $(glob-cli '{src/**/*.js,test/**/*.js,build/**/*.js}') && jscs $(glob-cli '{src,test,build}')",
     "lint:md": "node build/markdownlint.js",
-    "precommit": "npm run lint",
-    "prepush": "npm test",
-    "postmerge": "npm install"
   },
   "devDependencies": {
     "babel": "^5.8.23",
