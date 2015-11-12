@@ -1,6 +1,6 @@
 {
   "name": "ally.js",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0",
   "description": "JavaScript library to help web applications with accessibility concerns",
   "main": "dist/ally.min.js",
   "files": [
@@ -60,7 +60,7 @@
     "publish:jsbin": "jsbin-sync upload docs/**/*.example*.html --css '#example-css' --js '#example-js'",
     "lint": "npm-run-all --parallel lint:js lint:md",
     "lint:js": "eslint $(glob-cli '{src/**/*.js,test/**/*.js,build/**/*.js}') && jscs $(glob-cli '{src,test,build}')",
-    "lint:md": "node build/markdownlint.js",
+    "lint:md": "node build/markdownlint.js"
   },
   "devDependencies": {
     "babel": "^5.8.23",
