@@ -59,10 +59,7 @@
     "build:legacy:static-copy": "node scripts/web-tests/build.static-copy.js",
     "lint": "npm-run-all --parallel lint:js lint:md",
     "lint:js": "eslint $(glob-cli '{src/**/*.js,test/**/*.js,scripts/**/*.js}') && jscs $(glob-cli '{src,test,scripts}')",
-    "lint:md": "node scripts/markdownlint.js",
-    "precommit": "npm run lint",
-    "prepush": "npm test",
-    "postmerge": "npm install"
+    "lint:md": "node scripts/markdownlint.js"
   },
   "devDependencies": {
     "babel": "^5.8.23",
