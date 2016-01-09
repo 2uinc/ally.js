@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8" />
   <title>{{ title }} - {{ pkg.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{websiteRoot}}assets/website.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css" data-noprefix>
 </head>
@@ -12,6 +13,9 @@
   <div id="wrapper">
     <div id="navigation-column">
       {{> table-of-contents }}
+      <aside>
+        {{> contribute-to-document }}
+      </aside>
       <aside>
         {{> collection-navigation }}
       </aside>
@@ -26,5 +30,7 @@
 
   <script src="{{websiteRoot}}assets/website.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js" defer></script>
+
+  {{> tracking }}
 </body>
 </html>

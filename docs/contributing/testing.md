@@ -2,7 +2,7 @@
 layout: doc-page.html
 ---
 
-# Test Infrastructure
+# Test infrastructure
 
 The tests are built on top of [The Intern](https://theintern.github.io/). See the [tutorial](https://github.com/theintern/intern-tutorial) and [some examples](https://github.com/theintern/intern-examples) to get started. Also see [Chai BDD](http://chaijs.com/api/bdd/) for asserting stuff and [leadfoot](http://theintern.github.io/leadfoot/) for interacting with browsers.
 
@@ -16,21 +16,21 @@ For local development the command `npm run test` can be used to spawn an instanc
 
 Coverage reports are made available in the directory `reports/coverage`.
 
-> TODO: The tests should be run automatically via [TravisCI](https://theintern.github.io/intern/#ci-travis)
+Tests are run by [TravisCI](https://travis-ci.org/medialize/ally.js) on every push to `master`.
 
 
-## Locally Running Unit Tests In The Browser
+## Locally running unit tests in the browser
 
-You can run the unit tests in any browser by navigating to the following URL:
+You can run the unit tests in any browser by navigating to the following URL (replacing `${host}` and `${path}` accordingly):
 
 ```text
-http://{{your-host}}/{{path-to}}/ally.js/node_modules/intern/client.html?config=test/browser
+http://${hostname}>/${path}/ally.js/node_modules/intern/client.html?config=test/browser
 ```
 
 (we're not using `test/sauce` or `test/local` in the browser because of the `reporters` those configurations load)
 
 
-## Locally Running All Tests In The Browser
+## Locally running all tests in the browser
 
 Both unit and functional tests can be executed in Google Chrome locally via `npm run test` or `node test/run-local.js`. You could also [install and start ChromeDriver yourself](https://theintern.github.io/intern/#local-selenium) and then run `./node_modules/.bin/intern-runner config=test/local`. The `test/run-local.js` uses [dalek-driver-chrome](https://github.com/dalekjs/dalek-driver-chrome) to download, install and start ChromeDriver automatically.
 
@@ -47,12 +47,14 @@ node test/run-local.js \
   functionalSuites=tests/functional/selected-test
 ```
 
+* **NOTE:** The tests run off `dist/amd` and require the `reports` directory to exist. Before running running the tests, you need to have run `npm run clean` and `npm run build:amd` at least once.
 
-## Remotely Running All Tests In All Browsers
+
+## Remotely running all tests in all browsers
 
 You can register your own SauceLabs account (there is a [free tier](https://saucelabs.com/signup/plan/free)) and provide your own credentials if you don't have access to the project's account. The same is true for [BrowserStack](http://browserstack.com/).
 
-### Running Tests on BrowserStack
+### Running tests on BrowserStack
 
 ```sh
 # make BrowserStack credentials available to Intern
@@ -74,7 +76,7 @@ npm run test:browserstack
   functionalSuites=tests/functional/selected-test
 ```
 
-### Running Tests on SauceLaubs
+### Running tests on SauceLaubs
 
 ```sh
 # make SauceLabs credentials available to Intern
@@ -95,3 +97,37 @@ npm run test:sauce
   suites=test/unit/selected-test \
   functionalSuites=tests/functional/selected-test
 ```
+
+## Reports
+
+After running the automated tests, the `reports` directory will contain several files:
+
+```text
+reports
+├── coverage
+│   ├── …
+│   └── index.html  - test coverage in human readable format
+├── junit.xml       - test status non-human readable format
+└── lcov.info       - test coverage non-human readable format
+```
+
+When the tests executed, code coverage results can be uploaded to [Code Climate](http://codeclimate.com/) and [Coveralls](http://coveralls.io/) by running `npm run publish:lcov`.
+
+* **NOTE:** The coverage measured by `npm run test` is (dramatically) lower than for `npm run test-ci`, because the former only runs in a single browser, and ally.js has code paths that only run in specific browsers.
+
+
+## Analyzing bundle size
+
+Before a release the structure of the UMD bundle should be analyzed to make sure we didn't accidentally blow it up. This is done using [source-map-explorer](https://github.com/danvk/source-map-explorer).
+
+```sh
+# run surce-map-explorer
+npm run analyze:bundle
+```
+
+The report will be available in `reports/bundle-size.html`
+
+
+## Functional test limitations
+
+By way of LeadFoot and WebDriver, Intern allows us to script user actions. Such a user action could be *click on that element* or *press the <kbd>Tab</kbd> key*. While clicking on things generally works fine, sending keyboard commands does *not entirely* do what we expect (and need). While simulating the keypress of the <kbd>Tab</kbd> key will trigger the `keydown`, `keyup`, … event cascade, it will *not* make the browser advance focus to the next element. In other words, we can't test against browser behavior. For that reason we haven't created any functional tests up to now.

@@ -1,8 +1,8 @@
-# Issues Filed
+# Issues filed
 
 This document is used for collecting all the bugs reported and issues raised because of my investigating how focus works and creating ally.js.
 
-# Filed Browser Issues
+# Filed browser issues
 
 * Mouse/Touch Events Can Focus Parent Element - [WebKit 139945](https://bugs.webkit.org/show_bug.cgi?id=139945)
 * Multiple use of same image map hides elements from tabbing sequence - [Gecko 1116126](https://bugzilla.mozilla.org/show_bug.cgi?id=1116126)
@@ -30,9 +30,10 @@ This document is used for collecting all the bugs reported and issues raised bec
 * audio and video elements with controls cannot be removed from the focus navigation sequence - [Blink 512133](https://code.google.com/p/chromium/issues/detail?id=512133)
 * embed element cannot be removed from the focus navigation sequence [Gecko 1185657](https://bugzilla.mozilla.org/show_bug.cgi?id=1185657)
 * embed element with tabindex="0" breaks sequential focus navigation [Gecko 1195457](https://bugzilla.mozilla.org/show_bug.cgi?id=1195457)
+* `<summary>` and `<a>` within `<details open>` not keyboard focusable [WebKit 151767](https://bugs.webkit.org/show_bug.cgi?id=151767)
 
 
-## Filed Specification Issues
+## Filed specification issues
 
 * [object element usemap should be deprecated](https://www.w3.org/Bugs/Public/show_bug.cgi?id=27756)
 * [[Shadow]: how is the autofocus attribute supposed to be handled?](https://www.w3.org/Bugs/Public/show_bug.cgi?id=27757)

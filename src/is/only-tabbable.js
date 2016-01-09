@@ -1,5 +1,6 @@
 
 import platform from 'platform';
+import getWindow from '../util/get-window';
 import tabindexValue from '../util/tabindex-value';
 
 export default function(element) {
@@ -19,7 +20,7 @@ export default function(element) {
     return tabindex !== null && tabindex >= 0;
   }
 
-  if ((nodeName === 'object' || nodeName === 'embed') && element.getAttribute('type') === 'image/svg+xml' && platform.name === 'IE') {
+  if (nodeName === 'object' && element.getAttribute('type') === 'image/svg+xml' && platform.name === 'IE') {
     // Internet Explorer cannot focus, but tab to: object[type="image/svg+xml"]
     // [tabindex=-1] negates the tabbing
     return tabindex === null || tabindex >= 0;
@@ -29,7 +30,8 @@ export default function(element) {
     return element.getAttribute('focusable') !== 'false';
   }
 
-  if (element instanceof SVGElement) {
+  const _window = getWindow(element);
+  if (element instanceof _window.SVGElement) {
     if (nodeName === 'a' && element.hasAttribute('xlink:href')) {
       // any focusable child of <svg> cannot be focused, but tabbed to
       if (platform.name === 'Firefox') {

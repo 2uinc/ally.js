@@ -5,6 +5,7 @@
 import isFocusable from '../is/focusable';
 import isFocusRelevant from '../is/focus-relevant';
 import isOnlyTabbable from '../is/only-tabbable';
+import getDocument from '../util/get-document';
 
 // see https://developer.mozilla.org/en-US/docs/Web/API/NodeFilter
 const FocusableFilter = function(node) {
@@ -45,10 +46,15 @@ const PossiblyFocusableFilter = function(node) {
 PossiblyFocusableFilter.acceptNode = PossiblyFocusableFilter;
 
 export default function queryFocusableStrict({context, includeContext, strategy} = {}) {
+  if (!context) {
+    context = document.documentElement;
+  }
+
+  const _document = getDocument(context);
   // see https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker
-  const walker = document.createTreeWalker(
+  const walker = _document.createTreeWalker(
     // root element to start search in
-    context || document.documentElement,
+    context,
     // element type filter
     NodeFilter.SHOW_ELEMENT,
     // custom NodeFilter filter

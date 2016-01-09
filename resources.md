@@ -1,19 +1,12 @@
-# ally.js - Resources
+# ally.js - resources
 
+this is a link dump…
 
 ## Read
 
 Stuff I still need to read…
 
-### Focus
-
-* [Focus Handling - WICD](http://www.w3.org/TR/WICD/#focus-handling) explaining some algorithms
-
 ### ARIA
-
-* http://www.w3.org/TR/wai-aria/
-* http://w3c.github.io/aria-in-html/
-* http://www.w3.org/WAI/PF/aria-practices/
 
 * http://www.marcozehe.de/2008/02/29/easy-aria-tip-1-using-aria-required/
 * http://www.marcozehe.de/2008/08/06/aria-in-gmail-2-enhancing-the-chat-experience/
@@ -33,9 +26,8 @@ Stuff I still need to read…
 ---
 
 
-## Interesting Concepts
+## Interesting concepts
 
-* [FreeFocus: arrow-key focus navigation](https://github.com/Flamefork/freefocus) and [for GamePad](https://gist.github.com/cvan/343ab139223f3b5dd2cc)
 * [animated :focus transitions](http://n12v.com/focus-transition/)
   * https://github.com/NV/flying-focus/
   * https://jonathanstark.com/labs/flying-focus/
@@ -43,12 +35,12 @@ Stuff I still need to read…
 ---
 
 
-## Tools for Testing
+## Tools for testing
 
 Some Tools to actually "see" what you're doing, more in [web components punch list](http://www.paciellogroup.com/blog/2014/09/web-components-punch-list/),
 
 
-### Screen Readers
+### Screen readers
 
 * [ChromeVox](www.chromevox.com) (Chrome, Free)
 * [NVDA](http://www.nvaccess.org/) (Windows, Free)
@@ -57,7 +49,7 @@ Some Tools to actually "see" what you're doing, more in [web components punch li
 
 […and how to use them](http://www.paciellogroup.com/blog/2015/01/basic-screen-reader-commands-for-accessibility-testing/)
 
-### Tools for Visualizing the Accessibility Tree
+### Tools for visualizing the accessibility tree
 
 * [Firefox DOM Inspector Extension](https://addons.mozilla.org/en-US/firefox/addon/dom-inspector-6622/) (Accessibility Tree, Accessibility Events)
 * XCode Accessibility Inspector `open '/Applications/Xcode.app/Contents/Applications/Accessibility Inspector.app'`

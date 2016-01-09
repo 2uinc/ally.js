@@ -1,3 +1,4 @@
 
-const version = '1.0.0-beta.6';
+// this file is overwritten by `npm run build:pre`
+const version = 'master';
 export default version;

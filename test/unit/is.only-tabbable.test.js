@@ -27,7 +27,7 @@ define([
           '<label tabindex="0" id="label-tabindex-0">text</label>',
           '<label tabindex="-1" id="label-tabindex--1">text</label>',
           /*eslint-enable indent */
-        ].join(''), 'svg-container');
+        ], 'svg-container');
       },
       afterEach: function() {
         fixture.remove();
@@ -50,10 +50,6 @@ define([
       },
       'object element holding svg': function() {
         var element = document.getElementById('object-svg');
-        expect(isOnlyTabbable(element)).to.equal(platform.name === 'IE');
-      },
-      'embed element holding svg': function() {
-        var element = document.getElementById('embed-svg');
         expect(isOnlyTabbable(element)).to.equal(platform.name === 'IE');
       },
       'svg element': function() {

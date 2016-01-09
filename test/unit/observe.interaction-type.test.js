@@ -26,7 +26,7 @@ define([
         expect(type.key).to.equal(false, 'initial key');
       },
       'detect mouse': function() {
-        var deferred = this.async(100);
+        var deferred = this.async(10000);
         handle = observeInteractionType();
 
         var type = handle.get();
@@ -50,7 +50,16 @@ define([
         }), 20);
       },
       'detect key': function() {
-        var deferred = this.async(100);
+        var supportsSynthEvent = dispatchEvent.createKey('keydown', {
+          key: 'Tab',
+          keyCode: 9,
+        });
+
+        if (supportsSynthEvent.keyCode !== 9) {
+          this.skip('Synthetic Tab events not supported');
+        }
+
+        var deferred = this.async(10000);
         handle = observeInteractionType();
 
         var type = handle.get();

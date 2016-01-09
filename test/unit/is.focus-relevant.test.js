@@ -105,7 +105,7 @@ define([
         expect(isFocusRelevant(element)).to.equal(supports.canFocusObjectSvg);
       },
       'area element': function() {
-        var deferred = this.async(500);
+        var deferred = this.async(10000);
 
         var element = document.getElementById('image-map-area');
 
@@ -115,7 +115,7 @@ define([
         }), 200);
       },
       'area element with tabindex="-1"': function() {
-        var deferred = this.async(500);
+        var deferred = this.async(10000);
 
         var element = document.getElementById('image-map-area');
         element.setAttribute('tabindex', '-1');
@@ -157,11 +157,19 @@ define([
       },
       'embed element': function() {
         var element = document.getElementById('embed');
-        expect(isFocusRelevant(element)).to.equal(supports.canFocusEmbed);
+        if (!element) {
+          this.skip('skipping to avoid test colliding with QuickTime');
+        }
+
+        expect(isFocusRelevant(element)).to.equal(true);
       },
       'embed element with tabindex="0"': function() {
         var element = document.getElementById('embed-tabindex-0');
-        expect(isFocusRelevant(element)).to.equal(supports.canFocusEmbedTabindex);
+        if (!element) {
+          this.skip('skipping to avoid test colliding with QuickTime');
+        }
+
+        expect(isFocusRelevant(element)).to.equal(true);
       },
       'extended: CSS user-modify': function() {
         var _supports = document.body.style.webkitUserModify !== undefined;
