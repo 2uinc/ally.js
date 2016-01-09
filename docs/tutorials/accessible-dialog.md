@@ -2,15 +2,15 @@
 layout: doc-page.html
 ---
 
-# Accessible Dialog Tutorial
+# Accessible dialog tutorial
 
 This document explains what steps need to be taken in order to make a visually compelling, yet fully accessible dialog according to [WAI-ARIA 1.0 Authoring Practices](http://www.w3.org/WAI/PF/aria-practices/#dialog_modal).
 
-HTML5.1 specifies the [`<dialog>` element](http://www.w3.org/TR/html51/interactive-elements.html#the-dialog-element) that natively does most of what is explained here. But since [browser support](http://caniuse.com/#feat=dialog) is rather limited, making use of `<dialog>` is not yet possible.
+HTML5.1 specifies the [`<dialog>` element](http://www.w3.org/TR/html51/semantics.html#the-dialog-element) that natively does most of what is explained here. But since [browser support](http://caniuse.com/#feat=dialog) is rather limited, making use of `<dialog>` is not yet possible.
 
-The code discussed in this tutorial is available in [ally.js Dialog Example](./dialog.example.html) and can be [interacted with](#Interactive-Demo) below.
+The code discussed in this tutorial is available in [ally.js Dialog Example](./dialog.example.html) and can be [interacted with](#Interactive-demo) below.
 
-## The Visual Effect
+## The visual effect
 
 Before we get into the technical things, let's first discuss what a dialog is. From a user experience perspective it is a piece of information, or a set of interactions, provided to the user in a way that disrupts the user's current interaction. The user is made to focus on the dialog's content and ignore the rest of the application or website. Visually this is usually achieved by layering a box in the visual center of the application and by positioning a translucent layer (i.e. showing the content behind it, but in a distorted manner) behind the dialog, to emphasize that the layer is the only important thing.
 
@@ -39,7 +39,7 @@ To achieve this *visual effect* we don't need much code:
 But visual appearance is not the *only* thing we care about, especially not when claiming something is *accessible*. In the following sections we'll discuss how to take that visual experience to a technical level that we might call accessible.
 
 
-## HTML - The Dialog's Structure
+## HTML - the dialog's structure
 
 First of all we need a container for the dialog to live in, we use a `<div>` element, because it doesn't have any semantic meaning itself. We explain that the `<div>` actually *is* a dialog by adding [`role="dialog"`](http://www.w3.org/TR/wai-aria/roles#dialog). Roles are defined by ARIA, which allow us to express the *meaning* of an element. We also add `tabindex="-1"` to allow the dialog container to be focused, something we'll revisit soon. Because dialogs are not always visible, we also add the [`hidden` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden).
 
@@ -53,10 +53,10 @@ To structure the content rendered by the dialog, we'll use `<header>` for the in
 </div>
 ```
 
-Now that we have the bare bones, we should talk about a dialog's generic content, like titles and descriptions. All dialogs have a title, most will also have a description. To explain that the title and description actually belong to the dialog, we use the attributes [`aria-labeldby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) and [`aria-describedby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) respectively.
+Now that we have the bare bones, we should talk about a dialog's generic content, like titles and descriptions. All dialogs have a title, most will also have a description. To explain that the title and description actually belong to the dialog, we use the attributes [`aria-labelledby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-labelledby) and [`aria-describedby`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-describedby) respectively.
 
 ```html
-<div role="dialog" aria-labeldby="dialog-title" aria-describedby="dialog-description">
+<div role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
   <header>
     <h1 id="dialog-title">Name Entry</h1>
     <p id="dialog-description">Please enter your full name.</p>
@@ -95,7 +95,7 @@ The last ingredient is the element that renders the backdrop. Since we're nestin
 These snippets assemble to the following HTML construct:
 
 ```html
-<div id="dialog" role="dialog" aria-labeldby="dialog-title" aria-describedby="dialog-description" tabindex="-1" hidden>
+<div id="dialog" role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description" tabindex="-1" hidden>
   <form class="dialog-content">
     <header>
       <h1 id="dialog-title">Name Entry</h1>
@@ -296,7 +296,7 @@ openButton.addEventListener('click', openDialog, false);
 closeButton.addEventListener('click', closeDialog, false);
 ```
 
-### Trapping Focus Inside The Dialog
+### Trapping focus inside the dialog
 
 While a dialog is shown, we need to make sure that elements outside of the dialog cannot be interacted with. The backdrop achieves this for the mouse, as you're unable to click on anything anymore. But for other means of input, like the keyboard, elements are still accessible simply by hitting the <kbd>Tab</kbd> key often enough to reach them.
 
@@ -308,9 +308,9 @@ A naive implementation might listen to `keydown` events, filtering for <kbd>Tab<
 
 We could do away with the need to react to <kbd>Tab</kbd>, by simply hiding everything outside the dialog. But while setting everything to `visibility: hidden;` would certainly do the job, it would also visually hide *everything but the dialog*, rendering the backdrop useless. Most visual designers I know digress.
 
-So what we really want to do is make everything that is focusable outside of the dialog, not focusable while the dialog is shown. This is no small feat, as browsers offer *absolutely no API* to achieve that and disagree on what exactly is focusable - see [what browsers consider focusable](../data-tables/focusable.md). On top of that only form elements know the [`disabled` property](https://developer.mozilla.org/en-US/docs/Web/CSS/%3Adisabled). ally.js has got you covered with [`ally/query/focusable`](../api/query/focusable.md) to *find* focusable elements, and [`ally/element/disabled`](../api/element/disabled.md) to *disable any element*.
+So what we really want to do is make everything that is focusable outside of the dialog, not focusable while the dialog is shown. This is no small feat, as browsers offer *absolutely no API* to achieve that and disagree on what exactly is focusable - see [what browsers consider focusable](../data-tables/focusable.md). On top of that only form elements know the [`disabled` property](https://developer.mozilla.org/en-US/docs/Web/CSS/%3Adisabled). ally.js has got you covered with [`ally.query.focusable`](../api/query/focusable.md) to *find* focusable elements, and [`ally.element.disabled`](../api/element/disabled.md) to *disable any element*.
 
-To make things even more comfortable for you, ally.js provides [`ally/maintain/disabled`](../api/maintain/disabled.md) to disable any focusable element and observe changes to the DOM, so any element added to the DOM while the dialog is being shown are disabled as well. The `disengage()` method stops observing the DOM and re-enables all elements that were disabled by the service.
+To make things even more comfortable for you, ally.js provides [`ally.maintain.disabled`](../api/maintain/disabled.md) to disable any focusable element and observe changes to the DOM, so any element added to the DOM while the dialog is being shown are disabled as well. The `disengage()` method stops observing the DOM and re-enables all elements that were disabled by the service.
 
 ```js
 var dialog = document.getElementById('dialog');
@@ -336,13 +336,13 @@ function closeDialog() {
 }
 ```
 
-### Reacting To <kbd>Enter</kbd> and <kbd>Escape</kbd>
+### Reacting to <kbd>Enter</kbd> and <kbd>Escape</kbd>
 
 The <kbd>Escape</kbd> key usually closes (dismisses) a dialog and the <kbd>Enter</kbd> key usually activates the dialog's primary action. Because our example uses a `<form>` and a submit button for the save action, we don't have to listen for <kbd>Enter</kbd>, but can instead rely on the `submit` event of the `<form>`.
 
 If we hadn't done that, we'd have to make sure that the currently focused element does not have an enter-specific activation whenever the <kbd>Enter</kbd> key was pressed. The activation of a link (`<a href="…">`) is to open the referenced address. If we were to naively listen for `keydown` events and close the dialog upon <kbd>Enter</kbd>, we destroy the ability to interact with elements such as the link by keyboard. Since the is no way to reliably tell if an element is reacting to <kbd>Enter</kbd>, it seems easier to avoid that scenario entirely.
 
-The <kbd>Escape</kbd> key on the other hand doesn't have any activation and can be used naively. For simple (naive) keyboard bindings, ally.js provides [`ally/when/key`](../api/when/key.md) to execute a callback whenever the registered key was pressed. Because event handlers are executed before the native activation is performed, we need to either prevent the default action (using [`event.preventDefault()`](https://developer.mozilla.org/en/docs/Web/API/Event/preventDefault)), or delay closing of the dialog. Otherwise we would see focus being shifted back to the "open dialog" button, where the default activation would be performed, thus immediately reopening the dialog.
+The <kbd>Escape</kbd> key on the other hand doesn't have any activation and can be used naively. For simple (naive) keyboard bindings, ally.js provides [`ally.when.key`](../api/when/key.md) to execute a callback whenever the registered key was pressed. Because event handlers are executed before the native activation is performed, we need to either prevent the default action (using [`event.preventDefault()`](https://developer.mozilla.org/en/docs/Web/API/Event/preventDefault)), or delay closing of the dialog. Otherwise we would see focus being shifted back to the "open dialog" button, where the default activation would be performed, thus immediately reopening the dialog.
 
 Putting the keyboard handling together we get:
 
@@ -352,7 +352,7 @@ var keyHandle;
 
 function openDialog() {
   // React to enter and escape keys as mandated by ARIA Practices
-  keyHandle = whenKey({
+  keyHandle = ally.when.key({
     escape: closeDialogByKey,
   });
 
@@ -387,9 +387,9 @@ function saveDialog(event) {
 dialog.addEventListener('submit', saveDialog, true);
 ```
 
-### Focus First Focusable Element Upon Opening The Dialog
+### Focus first focusable element upon opening the dialog
 
-Once a dialog is opened, the first keyboard focusable (tabbable) element should receive focus. In order to accomplish this, you need to know which elements are keyboard focusable. There is no native DOM method to obtain such a list. ally.js has got you covered with [`ally/query/tabbable`](../api/query/tabbable.md). Since the *order* of elements is significant here, we need to sort the focusable elements by `tabindex` and `autofocus` attributes. ally.js provides the method [`ally/query/first-tabbable`](../api/query/first-tabbable.md) to do all that for you:
+Once a dialog is opened, the first keyboard focusable (tabbable) element should receive focus (in order to shift [virtual focus](../concepts.md#Virtual-focus)). In order to accomplish this, you need to know which elements are keyboard focusable. There is no native DOM method to obtain such a list. ally.js has got you covered with [`ally.query.tabbable`](../api/query/tabbable.md). Since the *order* of elements is significant here, we need to sort the focusable elements by `tabindex` and `autofocus` attributes. ally.js provides the method [`ally.query.firstTabbable`](../api/query/first-tabbable.md) to do all that for you:
 
 ```js
 var dialog = document.getElementById('dialog');
@@ -410,7 +410,7 @@ function openDialog() {
 }
 ```
 
-### Restoring Focus Upon Closing The Dialog
+### Restoring focus upon closing the dialog
 
 In order to restore focus on the element that was focused before we opened the dialog, we simply need to remember which element that was:
 
@@ -433,11 +433,11 @@ function closeDialog() {
 }
 ```
 
-### Hide Document From Screen Readers
+### Hide document from screen readers
 
 Screen Readers and other tools consuming the document through the Accessibility Tree instead of relying on visual presentation, need to be told what exactly is going on. The translucent backdrop, which obfuscates the document's content while the dialog is shown, does the job when you actually *see* the page. To achieve the same for non-visual output methods, we need to add [`aria-hidden="true"`](http://www.w3.org/TR/wai-aria/states_and_properties#aria-hidden) to all the sibling DOM elements of our dialog.
 
-There is no native DOM method to obtain all parental siblings of an element. ally.js has got you covered with [`ally/get/insignificant-branches`](../api/get/insignificant-branches.md), considering this is a pretty generic operation. To make things even more comfortable for you, ally.js provides [`ally/maintain/hidden`](../api/maintain/hidden.md) to also apply `aria-hidden="true"`. This service also observes changes to the DOM and applies `aria-hidden="true"` to any element added to the DOM while the dialog is being shown. The `disengage()` method stops observing the DOM and removes all `aria-hidden="true"` attributes that were set by the service.
+There is no native DOM method to obtain all parental siblings of an element. ally.js has got you covered with [`ally.get.insignificantBranches`](../api/get/insignificant-branches.md), considering this is a pretty generic operation. To make things even more comfortable for you, ally.js provides [`ally.maintain.hidden`](../api/maintain/hidden.md) to also apply `aria-hidden="true"`. This service also observes changes to the DOM and applies `aria-hidden="true"` to any element added to the DOM while the dialog is being shown. The `disengage()` method stops observing the DOM and removes all `aria-hidden="true"` attributes that were set by the service.
 
 ```js
 var dialog = document.getElementById('dialog');
@@ -464,9 +464,9 @@ function closeDialog() {
 }
 ```
 
-### Wait Until Dialog Is Visible Before Shifting Focus
+### Wait until dialog is visible before shifting focus
 
-An unspecified step performed by the browser when focusing an element is that the focusing element is scrolled into view. There is no way to prevent this from happening. But we can get around it by waiting for animated elements to come into view before shifting focus to them. For that reason ally.js provides the method [`ally/when/visible-area`](../api/when/visible-area.md) to execute a callback once an element fully entered the viewport. This allows us to rewrite focusing the first keyboard focusable element:
+An unspecified step performed by the browser when focusing an element is that the focusing element is scrolled into view. There is no way to prevent this from happening. But we can get around it by waiting for animated elements to come into view before shifting focus to them. For that reason ally.js provides the method [`ally.when.visibleArea`](../api/when/visible-area.md) to execute a callback once an element fully entered the viewport. This allows us to rewrite focusing the first keyboard focusable element:
 
 ```js
 var dialog = document.getElementById('dialog');
@@ -498,6 +498,7 @@ function openDialog() {
 }
 ```
 
-## Interactive Demo
+## Interactive demo
 
-* **EXAMPLE:** [ally.js Dialog Example](./dialog.example.html)
+* **EXAMPLE:** [Dialog Tutorial](./dialog.example.html)
+* **NOTE:** Focus is only trapped inside of the embedded iframe. The iframe's content cannot change this page in any way.

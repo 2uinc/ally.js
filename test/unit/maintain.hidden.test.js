@@ -30,7 +30,7 @@ define([
             '</div>',
           '</div>',
           /*eslint-disable indent */
-        ].join(''));
+        ]);
       },
       afterEach: function() {
         // make sure a failed test cannot leave listeners behind
@@ -77,7 +77,7 @@ define([
           this.skip('MutationObserver not supported');
         }
 
-        var deferred = this.async(500);
+        var deferred = this.async(10000);
 
         handle = maintainHidden({
           filter: '#target',

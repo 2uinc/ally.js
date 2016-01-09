@@ -1,16 +1,12 @@
 {
   "name": "ally.js",
-  "version": "1.0.1",
+  "version": "1.1.0-beta.2",
   "description": "JavaScript library to help web applications with accessibility concerns",
-  "main": "dist/ally.min.js",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "main": "ally.min.js",
   "npmName": "ally.js",
   "npmFileMap": [
     {
-      "basePath": "dist",
+      "basePath": "./",
       "files": [
         "ally.min.js",
         "ally.min.js.map"
@@ -18,7 +14,7 @@
     }
   ],
   "author": "Rodney Rehm <rodney.rehm@medialize.de> (http://rodneyrehm.de/en/)",
-  "homepage": "https://github.com/medialize/ally.js/",
+  "homepage": "http://allyjs.io/",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/medialize/ally.js/issues"
@@ -36,19 +32,29 @@
     "tabbable"
   ],
   "scripts": {
+    "init": "npm install && npm run build && npm run build:website",
     "test": "node test/run-local.js",
-    "test:ci": "npm run test:sauce",
     "test:sauce": "intern-runner config=test/sauce",
     "test:browserstack": "intern-runner config=test/browserstack",
-    "clean": "rm -rf dist web reports",
-    "build": "npm-run-all --sequential build:common --parallel build:umd build:amd",
+    "clean": "rm -rf dist web reports && mkdirp dist web reports",
+    "build": "npm-run-all --sequential build:pre --parallel build:umd build:common build:amd --sequential build:post build:archive",
+    "build:pre": "node build/build.pre.js",
+    "build:post": "node build/build.post.js",
+    "build:archive": "node build/build.archive.js",
     "build:umd": "npm-run-all --sequential build:umd:bundle build:umd:min build:umd:clean",
-    "build:umd:bundle": "browserify src/ally.js --debug --standalone ally --transform babelify | exorcist dist/ally.js.map > dist/ally.js",
+    "build:umd:bundle": "browserify dist/src/ally.js --debug --standalone ally --transform babelify | exorcist dist/ally.js.map > dist/ally.js",
     "build:umd:clean": "rm dist/ally.js dist/ally.js.map",
+<<<<<<< HEAD
     "build:umd:min": "uglifyjs dist/ally.js --mangle --compress --output dist/ally.min.js",
     "build:common": "babel --source-maps --modules common --out-dir dist/common src",
     "build:amd": "babel --source-maps --modules amd --out-dir dist/amd src",
+=======
+    "build:umd:min": "uglifyjs dist/ally.js --in-source-map dist/ally.js.map --source-map dist/ally.min.js.map --source-map-url ally.min.js.map --preamble \"/*! ${npm_package_name} - v${npm_package_version} - ${npm_package_homepage} - ${npm_package_license} License */\" --screw-ie8 --mangle --compress --output dist/ally.min.js",
+    "build:common": "babel --source-maps --modules common --out-dir dist/common dist/src",
+    "build:amd": "babel --source-maps --modules amd --out-dir dist/amd dist/src",
+>>>>>>> 8275e8967513d22881f41837ad2e9b80c4e0ca54
     "watch:amd": "babel --watch --source-maps --modules amd --out-dir dist/amd src",
+    "analyze:bundle": "source-map-explorer dist/ally.min.js --html > reports/bundle-size.html",
     "build:website": "npm-run-all --sequential build:docs --parallel build:data-tables build:legacy",
     "build:docs": "node build/metalsmith/metalsmith.js",
     "build:data-tables": "npm run build:data-tables:focusable",
@@ -57,34 +63,54 @@
     "build:legacy:focusable": "node build/web-tests/build.focusable.js",
     "build:legacy:event-sequence": "node build/web-tests/build.event-sequence.js",
     "build:legacy:static-copy": "node build/web-tests/build.static-copy.js",
-    "publish:jsbin": "jsbin-sync upload docs/**/*.example*.html --css '#example-css' --js '#example-js'",
+    "publish:jsbin": "jsbin-sync upload $(glob-cli 'docs/**/*.example*.html') --css '#example-css' --js '#example-js'",
+    "publish:website": "node build/publish.website.js",
+    "publish:npm": "npm publish dist",
+    "publish:npm:beta": "npm publish dist --tag beta",
+    "publish:lcov": "npm-run-all --parallel publish:codeclimate publish:coveralls",
+    "publish:codeclimate": "codeclimate-test-reporter < reports/lcov.info",
+    "publish:coveralls": "cat reports/lcov.info | coveralls",
     "lint": "npm-run-all --parallel lint:js lint:md",
     "lint:js": "eslint $(glob-cli '{src/**/*.js,test/**/*.js,build/**/*.js}') && jscs $(glob-cli '{src,test,build}')",
+<<<<<<< HEAD
     "lint:md": "node build/markdownlint.js"
+=======
+    "lint:md": "node build/markdownlint.js",
+    "ci:test": "npm-run-all --sequential lint:js ci:build:amd test:browserstack publish:lcov",
+    "ci:build:amd": "npm-run-all --sequential clean build:pre build:amd",
+    "ci:build": "npm-run-all --sequential clean build",
+    "ci:build:website": "npm-run-all --sequential lint:md ci:build:amd build:website",
+    "precommit": "npm run lint",
+    "postmerge": "npm install"
+>>>>>>> 8275e8967513d22881f41837ad2e9b80c4e0ca54
   },
   "devDependencies": {
+    "archiver": "^0.16.0",
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.2",
     "babelify": "^6.3.0",
     "browserify": "^11.1.0",
     "cheerio": "^0.19.0",
     "codeclimate-test-reporter": "^0.1.0",
+    "coveralls": "^2.11.4",
     "dalek-driver-chrome": "git://github.com/dalekjs/dalek-driver-chrome.git#0410d81",
     "eslint": "^1.4.3",
     "exorcist": "^0.4.0",
+    "gh-pages": "^0.5.0",
     "glob": "^5.0.14",
     "glob-cli": "^1.0.0",
     "handlebars": "^4.0.2",
     "husky": "^0.10.1",
-    "intern": "^3.0.5",
+    "intern": "rodneyrehm/intern#fix/proxy-mimetypes",
     "jquery": "^2.1.4",
     "jquery-ui": "git://github.com/jquery/jquery-ui.git#1.11.4",
-    "jsbin-sync": "^0.3.0",
+    "jsbin-sync": "^0.3.1",
     "jscs": "^2.1.1",
     "markdownlint": "git://github.com/rodneyrehm/markdownlint#temporary-fixes",
     "metalsmith": "^2.0.1",
     "metalsmith-broken-link-checker": "^0.1.6",
     "metalsmith-collections": "^0.7.0",
+    "metalsmith-in-place": "^1.3.2",
     "metalsmith-layouts": "^1.4.0",
     "metalsmith-markdown-remarkable": "^0.1.1",
     "metalsmith-packagejson": "^1.0.1",
@@ -100,13 +126,15 @@
     "requirejs": "^2.1.19",
     "sequence-comparison-table": "^0.2.1",
     "shelljs": "^0.5.3",
+    "source-map-explorer": "^1.2.2",
     "uglifyjs": "^2.4.10",
     "underscore": "^1.8.3",
     "urijs": "^1.16.1"
   },
   "dependencies": {
     "array.prototype.findindex": "^1.0.0",
-    "css.escape": "^1.1.0",
+    "css.escape": "^1.4.0",
+    "domtokenlist-shim": "git://github.com/rodneyrehm/domtokenlist#fix/non-browser-environment",
     "platform": "^1.3.0"
   }
 }

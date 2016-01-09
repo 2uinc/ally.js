@@ -24,13 +24,14 @@
   Alternate implementation: https://github.com/alice/modality
 */
 
+import 'domtokenlist-shim';
 import shadowFocus from '../event/shadow-focus';
 import engageInteractionTypeObserver from '../observe/interaction-type';
 import decorateService from '../util/decorate-service';
 
 // preferring focusin/out because they are synchronous in IE10+11
-const focusEventName = 'onfocusin' in document ? 'focusin' : 'focus';
-const blurEventName = 'onfocusin' in document ? 'focusout' : 'blur';
+const focusEventName = typeof document !== 'undefined' && ('onfocusin' in document ? 'focusin' : 'focus');
+const blurEventName = typeof document !== 'undefined' && ('onfocusin' in document ? 'focusout' : 'blur');
 
 // interface to read interaction-type-listener state
 let interactionTypeHandler;
@@ -39,8 +40,6 @@ let shadowHandle;
 let current = null;
 // overwrite focus source for use with the every upcoming focus event
 let lock = null;
-// overwrite focus source for use with the next focus event
-let next = null;
 // keep track of ever having used a particular input method to change focus
 const used = {
   pointer: false,
@@ -53,13 +52,10 @@ function handleFocusEvent(event) {
   let source = '';
   if (event.type === focusEventName || event.type === 'shadow-focus') {
     const interactionType = interactionTypeHandler.get();
-    source = lock || next
+    source = lock
       || interactionType.pointer && 'pointer'
       || interactionType.key && 'key'
       || 'script';
-
-    // next focus source is set only once
-    next = null;
   } else if (event.type === 'initial') {
     source = 'initial';
   }
@@ -84,14 +80,6 @@ function getUsedFocusSource(source) {
   return used[source];
 }
 
-function repeatFocusSource(source) {
-  next = source === false ? null : current;
-}
-
-function setNextFocusSource(source) {
-  next = source;
-}
-
 function lockFocusSource(source) {
   lock = source;
 }
@@ -99,7 +87,7 @@ function lockFocusSource(source) {
 function disengage() {
   // clear dom state
   handleFocusEvent({type: blurEventName});
-  current = lock = next = null;
+  current = lock = null;
   Object.keys(used).forEach(function(key) {
     document.documentElement.classList.remove('focus-source-' + key);
     used[key] = false;
@@ -129,9 +117,7 @@ function engage() {
   return {
     used: getUsedFocusSource,
     current: getCurrentFocusSource,
-    next: setNextFocusSource,
     lock: lockFocusSource,
-    repeat: repeatFocusSource,
   };
 }
 

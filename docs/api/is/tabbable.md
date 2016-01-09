@@ -1,59 +1,71 @@
 ---
 layout: doc-api.html
-apiModuleName: ally/is/tabbable
-apiBuiltName: ally.is.tabbable
+tags: argument-list
 ---
 
 # ally.is.tabbable
 
 Determines if an element is considered keyboard focusable ("tabbable").
 
+
+## Description
+
 The function does *not* verify if an element is focusable. It expects input that is considered focusable, so `isTabbable(element)` does *not always* equal `isFocusable(element) && isTabbable(element)`.
 
 Consult the data tables [what browsers consider focusable](../../data-tables/focusable.md) and [what ally.js considers focusable](../../data-tables/focusable.strict.md) to learn how HTML elements behave.
 
 
-## Notes
-
-See [`ally/is/focus-relevant`](./focus-relevant.md#Notes)
-
-* **NOTE:** there is no way to feature detect if an element is tabbable or not. The `Element.tabIndex` property gives some indication, but ultimately user agent string sniffing is done internally to fix mismatches.
-
-
-## Demo
-
-TODO: figure out how to integrate demo
-
-
 ## Usage
 
-```html
-<script src="path/to/ally.min.js"></script>
-<script>
-  var element = document.getElementById('victim');
-  var tabbable = ally.is.tabbable(element);
-  // tabbable is a boolean
-</script>
+```js
+var element = document.getElementById('victim');
+var isTabbable = ally.is.tabbable(element);
 ```
 
-See [Getting Started](../../getting-started.md) for how to use CommonJS, AMD or ES6 modules.
+### Arguments
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| element | [`HTMLElement`](https://developer.mozilla.org/en/docs/Web/API/HTMLElement) | *required* | The Element to test. |
+
+### Returns
+
+Boolean, `true` if the element is focus relevant.
+
+### Throws
+
+[`TypeError`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError) if `element` argument is not of type `HTMLElement`.
 
 
-## Related Resources
-
-* [`ally/is/disabled`](disabled.md)
-* [`ally/is/focusable`](focusable.md)
-* [`ally/is/shadowed`](shadowed.md)
-* [`ally/is/valid-area`](valid-area.md)
-* [`ally/is/valid-tabindex`](valid-tabindex.md)
-* [`ally/is/visible`](visible.md)
-* [`ally/query/tabbable`](../query/tabbable.md) is using this to provide a higher level API
+## Examples
 
 
-## Contribution Notes
+## Changes
+
+* Since `v#master` matching of `SVGElement`s is done document-independent, to allow elements from other documents (e.g. from an iframe).
+
+
+## Notes
+
+See [`ally.is.focusRelevant`](./focus-relevant.md#Notes)
+
+* **NOTE:** there is no way to feature detect if an element is tabbable or not. The `Element.tabIndex` property gives some indication, but ultimately user agent sniffing (via [platform.js](https://github.com/bestiejs/platform.js/)) is done internally to fix mismatches.
+
+
+## Related resources
+
+* [`ally.is.focusRelevant`](focus-relevant.md) identifies elements that can receive focus
+* [`ally.is.focusable`](focusable.md) identifies elements that are focusable
+* [`ally.is.onlyTabbable`](focusable.md) identifies elements that are keyboard focusable but not focusable by script
+* [`ally.query.tabbable`](../query/tabbable.md) finds keyboard focusable elements in the DOM
+
+* [What Browsers Consider Focusable](../../data-tables/focusable.md)
+* [What ally.js Considers Focusable](../../data-tables/focusable.strict.md)
+
+
+## Contributing
 
 * [module source](https://github.com/medialize/ally.js/blob/master/src/is/tabbable.js)
 * [document source](https://github.com/medialize/ally.js/blob/master/docs/api/is/tabbable.md)
 * [unit test](https://github.com/medialize/ally.js/blob/master/test/unit/is.tabbable.test.js)
-
 

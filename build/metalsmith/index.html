@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8" />
   <title>{{ pkg.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{websiteRoot}}assets/website.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css" data-noprefix>
 </head>
@@ -12,12 +13,14 @@
   <div id="wrapper">
     <div id="navigation-column">
       <nav id="table-of-contents">
-        <h1>Table Of Contents</h1>
+        <h1>On this page</h1>
         <ul>
           <li><a href="#what-ally-is">What is ally.js?</a></li>
-          <li><a href="#getting-started">Getting Started</a></li>
-          <li><a href="#what-people-say">What People Say</a></li>
-          <li><a href="#supported-by">Supported By</a></li>
+          <li><a href="#simple-API">Simple API</a></li>
+          <li><a href="#what-is-focusable">What is focusable?</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#what-people-say">What people say</a></li>
+          <li><a href="#supported-by">Supported by</a></li>
         </ul>
       </nav>
     </div>
@@ -29,11 +32,51 @@
         </header>
 
         <section>
+          <img src="assets/ally-js-logo.png" class="logo" alt="ally.js logo - showing the United Nations Accessibility Logo on top of the JS logo">
           <p>ally.js is a JavaScript library simplifying certain accessibility features, functions and behaviors. However, simply loading ally.js will not automagically make a web application accessible. The library provides certain standard functions the "web platform" should've provided itself, so JavaScript applications can be made accessible more easily.</p>
 
-          <p>ally.js has been tested on IE10+, Android 4.4+ and iOS8+ alongside the latest desktop versions of Firefox, Chrome and Safari.</p>
+          <p>ally.js has been tested on IE9+, Firefox, Chrome and Safari 9, as well as Mobile Chrome on Android 5.1 and Safari for iOS 9.</p>
 
-          <h2>Focus Management</h2>
+        </section>
+      </article>
+
+      <article class="getting-started">
+        <header>
+          <h1 id="simple-API">Simple API</h1>
+        </header>
+
+        <section>
+          <p>How would you prevent elements outside of your modal dialog or menu from receiving focus?</p>
+          <pre><code class="language-markup">&lt;script src=&quot;path/to/ally.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  ally.maintain.disabled({
+    filter: '#my-dialog-element'
+  });
+&lt;/script&gt;</code></pre>
+        </section>
+        <section class="example">
+          <a class="jsbin-embed" href="https:/jsbin.com/qokupi/embed?output">ally.maintain.disabled Example on jsbin.com</a><script src="https://static.jsbin.com/js/embed.min.js?3.35.3"></script>
+        </section>
+      </article>
+
+      <article class="getting-started">
+        <header>
+          <h1 id="what-is-focusable">What is focusable?</h1>
+        </header>
+
+        <section>
+          <p>Do you know which elements are <em>focusable</em> or <em>tabbable</em>? ally.js does and does it's best to hide that complexity behind <a href="api/index.html#Finding-elements">simple to use APIs</a>.</p>
+          <p><a href="data-tables/focusable.html"><img src="assets/home/focusable-crop.png" alt="image of focusable data-table"></a></p>
+          <p>See <a href="what-is-focusable.html">What does "focusable" mean</a>.</p>
+        </section>
+      </article>
+
+      <article class="getting-started">
+        <header>
+          <h1 id="features">Features</h1>
+        </header>
+        
+        <section>
           <ul>
             <li>Identify and absorb browser differences regarding which elements are considered focusable</li>
             <li>Query the DOM for all focusable or tabbable (keyboard focusable) elements</li>
@@ -44,44 +87,34 @@
             <li>Determine how focus changed (keyboard, mouse, script) to apply different focus outline styles</li>
             <li>Determine when an element is focusable and visible in the viewport to prevent browsers from scrolling the element into view upon focus</li>
           </ul>
-          <p>Have a look at the <a href="api/index.html">API Documentation</a>.</p>
-        </section>
-      </article>
 
-      <article class="getting-started">
-        <header>
-          <h1 id="getting-started">Getting Started</h1>
-        </header>
-
-        <section>
-          <p>ally.js is available on <a href="https://www.npmjs.com/package/ally.js">npm</a> and can be downloaded from the <a href="https://github.com/medialize/ally.js/releases">release page</a>.</p>
-          <p>ally.js comes in a pre-built UMD bundle that is ready for use with <code>&lt;script&gt;</code>, AMD and CommonJS loaders. The UMD bundle contains all the dependencies and weighs in at 20KB gzipped. The modular architecture allows you to consume only specific components as AMD, CommonJS and ES6. Have a look at the <a href="getting-started.html">Getting Started Guide</a>.</p>
-        </section>
-        <section>
-          <p>Using ally.js is just a matter of dropping in the library:</p>
-          <pre><code class="language-markup">&lt;script src=&quot;path/to/ally.min.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-  var elements = ally.query.focusable();
-  console.log(&quot;focusable elements&quot;, elements);
-&lt;/script&gt;</code></pre>
+          <p>Have a look at the <a href="api/index.html">API documentation</a>.</p>
         </section>
       </article>
 
       <article class="what-people-say">
         <header>
-          <h1 id="what-people-say">What People Say</h1>
+          <h1 id="what-people-say">What people say</h1>
         </header>
         <section>
           <blockquote>
             <span>This is a fantastic piece of information and I'm utterly in love with the helper methods ally.js is offering to make this (usually painful) work nice and easy.</span>
             <a href="https://twitter.com/ginader">Dirk Ginader</a>
           </blockquote>
+          <blockquote>
+            <span>Wow, ally.js looks super useful! Glad to see it happen.</span>
+            <a href="https://twitter.com/robinberjon">Robin Berjon</a>
+          </blockquote>
+          <blockquote>
+            <span>I'm intrigued by how simple ally.js makes it for us to handle basic accessibility needs.</span>
+            <a href="https://twitter.com/asciidisco">Sebastian Golasch</a>
+          </blockquote>
         </section>
       </article>
 
       <article class="supported-by">
         <header>
-          <h1 id="supported-by">Supported By</h1>
+          <h1 id="supported-by">Supported by</h1>
         </header>
 
         <section>
@@ -91,7 +124,9 @@
               provide VMs for automated testing - <em>free for open source projects.</em>
             </li>
             <li>
-              <a href="https://codeclimate.com/oss">Code Climate</a> provides us with automated code analysis -
+              <a href="https://codeclimate.com/github/medialize/ally.js">Code Climate</a>
+              and <a href="https://coveralls.io/github/medialize/ally.js/">Coveralls</a>
+              provide us with automated code analysis and coverage reports -
               <em>free for open source projects.</em>
             </li>
             <li>
@@ -108,5 +143,7 @@
 
   <script src="{{websiteRoot}}assets/website.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js" defer></script>
+
+  {{> tracking }}
 </body>
 </html>
